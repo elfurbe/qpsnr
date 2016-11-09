@@ -64,7 +64,7 @@ out_height(_out_height), pFormatCtx(NULL), pCodecCtx(NULL), pCodec(NULL), pFrame
         	throw std::runtime_error("Can't open codec for video stream");
     	}
     	// alloacate data to extract frames
-    	pFrame = avcodec_alloc_frame();
+    	pFrame = av_frame_alloc();
     	if (!pFrame) {
         	free_resources();
         	throw std::runtime_error("Can't allocated frame for video stream");
