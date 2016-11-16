@@ -103,7 +103,7 @@ int qav::qvideo::get_fps_k(void) const {
 }
 
 bool qav::qvideo::get_frame(std::vector<unsigned char>& out, int *_frnum, const bool skip) {
-	out.resize(avpicture_get_size(AV_PIX_FMT_RGB24, out_width, out_height));
+	out.resize(av_image_get_buffer_size(AV_PIX_FMT_RGB24, out_width, out_height, 0));
 	AVPacket	packet;
 	bool		is_read = false;
 	av_init_packet(&packet);
@@ -111,8 +111,16 @@ bool qav::qvideo::get_frame(std::vector<unsigned char>& out, int *_frnum, const 
 		if (packet.stream_index==videoStream) {
 			int frameFinished = 0;
 			// Decode video frame
-			if(0 > avcodec_decode_video2(pCodecCtx, pFrame, &frameFinished, &packet))
-				return false;
+			int ret = 0;
+			ret = avcodec_send_packet(pCodecCtx, &packet);
+			if (ret < 0)
+				return ret == AVERROR_EOF ? 0 : ret;
+			ret = avcodec_receive_frame(pCodecCtx, pFrame);
+			if (ret < 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF)
+				return ret;
+			if (ret >= 0)
+				frameFinished = 1;
+
 			if(frameFinished) {
 				++frnum;
 				if (_frnum) *_frnum = frnum;
