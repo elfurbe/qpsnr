@@ -43,7 +43,7 @@ out_height(_out_height), pFormatCtx(NULL), pCodecCtx(NULL), pCodec(NULL), pFrame
 
     	// find video stream (first)
     	for (unsigned int i=0; i<pFormatCtx->nb_streams; i++) {
-        	if (AVMEDIA_TYPE_VIDEO == pFormatCtx->streams[i]->codec->codec_type) {
+        	if (AVMEDIA_TYPE_VIDEO == pFormatCtx->streams[i]->codecpar->codec_type) {
             		videoStream=i;
             		break;
         	}
@@ -53,8 +53,9 @@ out_height(_out_height), pFormatCtx(NULL), pCodecCtx(NULL), pCodec(NULL), pFrame
         	throw std::runtime_error("Can't find video stream");
     	}
     	// Get a pointer to the codec context for the video stream
-    	pCodecCtx=pFormatCtx->streams[videoStream]->codec;
+    	pCodecPar=pFormatCtx->streams[videoStream]->codecpar;
     	pCodec=avcodec_find_decoder(pCodecCtx->codec_id);
+	avcodec_parameters_to_context(pCodecCtx, pCodecPar);
     	if(!pCodec) {
         	free_resources();
         	throw std::runtime_error("Can't find codec for video stream");

@@ -49,6 +49,7 @@ namespace qav {
 					out_height;
 		AVFormatContext		*pFormatCtx;
 		AVCodecContext  	*pCodecCtx;
+		AVCodecParameters	*pCodecPar;
 		AVCodec         	*pCodec;
 		AVFrame			*pFrame;
 		struct SwsContext	*img_convert_ctx;
