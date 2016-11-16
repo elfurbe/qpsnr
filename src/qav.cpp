@@ -136,7 +136,7 @@ bool qav::qvideo::get_frame(std::vector<unsigned char>& out, int *_frnum, const 
 				}
 			}
 		}
-		av_free_packet(&packet);
+		av_packet_unref(&packet);
 		if (is_read) return true;
 	}	
 	return false;
