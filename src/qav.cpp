@@ -126,9 +126,9 @@ bool qav::qvideo::get_frame(std::vector<unsigned char>& out, int *_frnum, const 
 				if (_frnum) *_frnum = frnum;
 				is_read=true;
 				if (!skip) {
-					AVPicture picRGB;
 					// Assign appropriate parts of buffer to image planes in pFrameRGB
-					avpicture_fill((AVPicture*)&picRGB, (unsigned char*)&out[0], AV_PIX_FMT_RGB24, out_width, out_height);
+					AVFrame picRGB;
+					av_image_fill_arrays(picRGB.data, picRGB.linesize, (unsigned char*)&out[0], AV_PIX_FMT_RGB24, out_width, out_height, 1);
                 			// Convert the image from its native format to RGB
        					sws_scale(img_convert_ctx, pFrame->data, pFrame->linesize, 0, pCodecCtx->height, picRGB.data, picRGB.linesize);
 					if (settings::SAVE_IMAGES)
