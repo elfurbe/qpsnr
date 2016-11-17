@@ -1,2 +1,4 @@
 # qpsnr
-Updating qpsnr to work with libav 12
+Updated qpsnr to work with libav 12
+
+original project site: http://qpsnr.youlink.org/

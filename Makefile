@@ -7,10 +7,10 @@ LINK=g++
 SRCDIR=src
 OBJDIR=obj
 STD_FLAGS=-W -Wall -ggdb -O2 -D_REENTRANT -pthread -D__STDC_LIMIT_MACROS=1 -D__STDC_CONSTANT_MACROS=1 -D__STDC_FORMAT_MACROS==1 -std=gnu++98 -D_GNU_SOURCE
-LAV_FLAGS=-I/opt/libav/include -I/opt/x264/include -I/opt/x265/include
+#LAV_FLAGS=-I/opt/libav/include -I/opt/x264/include -I/opt/x265/include
 FLAGS=$(STD_FLAGS) $(LAV_FLAGS)
 STD_LIBS=-lavcodec -lavformat -lswscale -lavutil
-LAV_LIBS=-L/opt/libav/lib -L/opt/x264/lib -L/opt/x265/lib
+#LAV_LIBS=-L/opt/libav/lib -L/opt/x264/lib -L/opt/x265/lib
 LIBS=$(STD_LIBS) $(LAV_LIBS)
 OBJS=$(OBJDIR)/qav.o $(OBJDIR)/stats.o $(OBJDIR)/main.o $(OBJDIR)/settings.o 
 EXEC=qpsnr
