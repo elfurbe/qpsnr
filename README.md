@@ -1,2 +1,2 @@
 # qpsnr
-Updating qpsnr to work with libav 12
+Updating qpsnr to work with ffmpeg4
