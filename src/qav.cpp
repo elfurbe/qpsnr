@@ -64,7 +64,7 @@ out_height(_out_height), pFormatCtx(NULL), pCodecCtx(NULL), pCodec(NULL), pFrame
         	throw std::runtime_error("Can't open codec for video stream");
     	}
     	// alloacate data to extract frames
-    	pFrame = avcodec_alloc_frame();
+    	pFrame = av_frame_alloc();
     	if (!pFrame) {
         	free_resources();
         	throw std::runtime_error("Can't allocated frame for video stream");
@@ -84,7 +84,7 @@ out_height(_out_height), pFormatCtx(NULL), pCodecCtx(NULL), pCodec(NULL), pFrame
     	if (out_width!=pCodecCtx->width || out_height!=pCodecCtx->height)
         	LOG_WARNING << "Video (" << file <<") will get scaled: " << pCodecCtx->width << 'x' << pCodecCtx->height << " (in), " << out_width << 'x' << out_height << " (out)" << std::endl;
 
-    	img_convert_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt, out_width, out_height, PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL);
+    	img_convert_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt, out_width, out_height, AV_PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL);
     	if (!img_convert_ctx) {
         	free_resources();
         	throw std::runtime_error("Can't allocated sw_scale context");
@@ -102,7 +102,7 @@ int qav::qvideo::get_fps_k(void) const {
 }
 
 bool qav::qvideo::get_frame(std::vector<unsigned char>& out, int *_frnum, const bool skip) {
-	out.resize(avpicture_get_size(PIX_FMT_RGB24, out_width, out_height));
+	out.resize(avpicture_get_size(AV_PIX_FMT_RGB24, out_width, out_height));
 	AVPacket	packet;
 	bool		is_read = false;
 	av_init_packet(&packet);
@@ -119,7 +119,7 @@ bool qav::qvideo::get_frame(std::vector<unsigned char>& out, int *_frnum, const 
 				if (!skip) {
 					AVPicture picRGB;
 					// Assign appropriate parts of buffer to image planes in pFrameRGB
-					avpicture_fill((AVPicture*)&picRGB, (unsigned char*)&out[0], PIX_FMT_RGB24, out_width, out_height);
+					avpicture_fill((AVPicture*)&picRGB, (unsigned char*)&out[0], AV_PIX_FMT_RGB24, out_width, out_height);
                 			// Convert the image from its native format to RGB
        					sws_scale(img_convert_ctx, pFrame->data, pFrame->linesize, 0, pCodecCtx->height, picRGB.data, picRGB.linesize);
 					if (settings::SAVE_IMAGES)
