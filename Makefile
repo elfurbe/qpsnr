@@ -6,7 +6,11 @@ CPPC=g++
 LINK=g++
 SRCDIR=src
 OBJDIR=obj
-FLAGS=-W -Wall -ggdb -O2 -D_REENTRANT -pthread -D__STDC_LIMIT_MACROS=1 -D__STDC_CONSTANT_MACROS=1 -D__STDC_FORMAT_MACROS==1 -std=gnu++98 -D_GNU_SOURCE
+LIBAVCODEC_CFLAGS=`pkg-config --cflags libavcodec`
+LIBAVFORMAT_CFLAGS=`pkg-config --cflags libavformat`
+LIBSWSCALE_CFLAGS=`pkg-config --cflags libswscale`
+LIBAVUTIL_CFLAGS=`pkg-config --cflags libavutil`
+FLAGS=-W -Wall -ggdb -O2 -D_REENTRANT -pthread -D__STDC_LIMIT_MACROS=1 -D__STDC_CONSTANT_MACROS=1 -D__STDC_FORMAT_MACROS==1 -std=gnu++98 -D_GNU_SOURCE $(LIBAVCODEC_CFLAGS) $(LIBAVFORMAT_CFLAGS) $(LIBSWSCALE_CFLAGS) $(LIBAVUTIL_CFLAGS)
 LIBS=-lavcodec -lavformat -lswscale -lavutil
 OBJS=$(OBJDIR)/qav.o $(OBJDIR)/stats.o $(OBJDIR)/main.o $(OBJDIR)/settings.o 
 EXEC=qpsnr
